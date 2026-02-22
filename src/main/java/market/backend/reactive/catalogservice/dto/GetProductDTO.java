@@ -7,6 +7,7 @@ public record GetProductDTO(
         UUID id,
         String name,
         String description,
-        BigDecimal stockQuantity
+        BigDecimal price,
+        Integer stockQuantity
 ) {
 }

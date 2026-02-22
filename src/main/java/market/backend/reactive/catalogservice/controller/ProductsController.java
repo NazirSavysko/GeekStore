@@ -18,12 +18,12 @@ import static org.springframework.http.ResponseEntity.created;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/products")
-public class ProductsController {
+public final class ProductsController {
 
     private final ProductWriteService productWriteService;
     private final ProductReadService productReadService;
 
-    @PostMapping("/create")
+    @PostMapping
     public Mono<ResponseEntity<GetProductDTO>> createProduct(final @Valid @RequestBody Mono<CreateProductDTO> product,
                                                              final UriComponentsBuilder uriComponentsBuilder) {
         return product
@@ -31,13 +31,15 @@ public class ProductsController {
                         .name(productDto.name())
                         .description(productDto.description())
                         .price(productDto.price())
+                        .stockQuantity(productDto.stockQuantity())
                         .build())
                 .flatMap(productWriteService::saveProduct)
                 .map(product1 -> new GetProductDTO(
                         product1.getId(),
                         product1.getName(),
                         product1.getDescription(),
-                        product1.getPrice())
+                        product1.getPrice(),
+                        product1.getStockQuantity())
                 )
                 .map(createdProduct -> created(uriComponentsBuilder
                                 .replacePath("/api/v1/products/{id}")
@@ -54,7 +56,8 @@ public class ProductsController {
                         product.getId(),
                         product.getName(),
                         product.getDescription(),
-                        product.getPrice())
+                        product.getPrice(),
+                        product.getStockQuantity())
                 );
     }
 }

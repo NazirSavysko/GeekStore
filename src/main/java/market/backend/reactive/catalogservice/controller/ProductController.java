@@ -13,7 +13,7 @@ import static org.springframework.http.ResponseEntity.noContent;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/products/{postId}")
-public final class PostController {
+public final class ProductController {
 
     private final ProductReadService productReadService;
     private final ProductWriteService productWriteService;
@@ -26,11 +26,12 @@ public final class PostController {
                         product.getId(),
                         product.getName(),
                         product.getDescription(),
-                        product.getPrice())
+                        product.getPrice(),
+                        product.getStockQuantity())
                 );
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public Mono<ResponseEntity<Void>> deletePostById(@PathVariable final String postId) {
         return this
                 .productWriteService
